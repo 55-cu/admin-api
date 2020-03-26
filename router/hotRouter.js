@@ -5,7 +5,7 @@ const {findHotByKw,
      findHot,
      delHot,
      updateHot,
-     findHotByPage} = require('../controls/HotControl')
+     findHotByPage} = require('../controls/hotControl')
 
 /**
  * @api {post} /admin/hot/add   添加热门话题
@@ -40,7 +40,7 @@ router.post('/add',(req,res)=>{
  * @apiSuccess {Array} list  查询到的数据.
  */
 // 根据id获取商品 
-router.post('/infos',(req,res)=>{
+router.post('/info',(req,res)=>{
   let  {_id} = req.body
   findHot(_id)
   .then((infos)=>{res.send({list:infos,err:0,msg:'查询成功'})})
@@ -98,12 +98,11 @@ router.post('/update',(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/infoPage',(req,res)=>{
+router.post('/infopage',(req,res)=>{
   let page = req.body.page||1 //查询的第几页数据
   let pageSize = req.body.pageSize ||2 //每页几条数据
   findHotByPage(page,pageSize)
   .then((data)=>{
-     console.log(data)
      let {result,allCount}=data 
     res.send({err:0,msg:'查询成功',list:result,allCount})
   })
@@ -124,7 +123,7 @@ router.post('/infoPage',(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/kwInfo',(req,res)=>{
+router.post('/kwinfo',(req,res)=>{
   let kw = req.body.kw ||''
   let page = req.body.page||1
   let pageSize = req.body.pageSize||2

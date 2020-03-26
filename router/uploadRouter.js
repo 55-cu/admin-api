@@ -8,7 +8,6 @@ const  upload = multer({})
 const router = express.Router()
 
 router.post('/img',upload.single('hehe'),(req,res)=>{
-  console.log(req.file)
   let {buffer,mimetype,size} = req.file 
   // 判断尺寸 1.前端判断 2.后端判断
   if(size >= 200000){

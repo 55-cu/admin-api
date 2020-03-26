@@ -31,9 +31,9 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Array",
+            "type": "String",
             "optional": false,
-            "field": "topics",
+            "field": "topic",
             "description": "<p>话题.</p>"
           }
         ]
@@ -700,8 +700,108 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/admin/user/del",
+    "title": "用户删除",
+    "name": "del",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>用户主键id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "err",
+            "description": "<p>状态码r.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>信息提示.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "list",
+            "description": "<p>查询到的数据.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "router/userRouter.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/admin/user/infopage",
+    "title": "用户查询",
+    "name": "infopage",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>查询页码数.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页的数据条数.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "err",
+            "description": "<p>状态码r.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>信息提示.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "router/userRouter.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
     "url": "/admin/user/login",
-    "title": "邮箱登录",
+    "title": "用户登录",
     "name": "login",
     "group": "User",
     "parameter": {
@@ -770,6 +870,63 @@ define({ "api": [
             "optional": false,
             "field": "pass",
             "description": "<p>注册密码.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "err",
+            "description": "<p>状态码r.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>信息提示.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "router/userRouter.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/admin/user/update",
+    "title": "用户密码修改",
+    "name": "update",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user",
+            "description": "<p>用户名称.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "oldpass",
+            "description": "<p>旧密码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "newpass",
+            "description": "<p>修改的密码.</p>"
           }
         ]
       }
