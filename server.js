@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
-const tokenMiddleWare = require('./middleware/tokenMiddleWare')
 const app = express()
 
 //启动服务器的时候同时启动数据库
@@ -10,7 +9,6 @@ const db = require('./db/connect')
 //post 数据的解析 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 //静态资源路径
 app.use('/public',express.static(path.join(__dirname,'./public')))
 

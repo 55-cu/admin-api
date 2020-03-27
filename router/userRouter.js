@@ -13,27 +13,19 @@
 
 const  express = require('express')
 const  {userReg,userLogin,logOut,findUserByPage,updateUser,delUser} = require("../controls/userControl.js")
-const tokenMiddlWare = require('../middleware/tokenMiddleWare')
 // const  Mail = require('../utils/mail')
 // const  mails={} 
 const router = express.Router()
-// router.post('/getCode',(req,res)=>{
-//   let {mail} = req.body 
-//   let code =parseInt(Math.random()*9999)
-//   Mail.send(mail,code).then(()=>{
-//     mails[mail] = code 
-//     res.send({err:0,msg:'验证码发送ok'})
-//   })
-//   .catch(()=>{
-//     res.send({err:-1,msg:'验证码发送nook'})
-//   })
-// })
+
+const authPermissions = require('../middleware/authPermissions')
+const tokenMiddleWare = require('../middleware/tokenMiddleWare')
 
  /**
  * @api {post} /admin/user/reg  用户注册
  * @apiName reg
  * @apiGroup User
  *
+ * @apiParam {String} leavel  权限等级（非必须，默认admin普通用户）.
  * @apiParam {String} user  用户名.
  * @apiParam {String} pass  注册密码.
  *
@@ -42,8 +34,9 @@ const router = express.Router()
  */
 router.post('/reg',(req,res)=>{
   let {user,pass} = req.body 
+  let leavel = req.body.leavel||'admin'
   // console.log(req.body)
-  userReg(user,pass)
+  userReg(user,pass,leavel)
   .then(()=>{res.send({err:0,msg:'注册ok'})})
   .catch((err)=>{res.send({err:-2,msg:err})})
 })
@@ -71,14 +64,26 @@ router.post('/login',(req,res)=>{
 })
 
 // 退出登录 也需要验证token  tokenMiddlWare中间件
-router.post('/logout',(req,res)=>{
+/**
+ * @api {post} /admin/user/logout  用户注销
+ * @apiName logout
+ * @apiGroup User
+ *
+ * @apiParam {String} _id  用户id.
+ *
+ * @apiSuccess {String} err 状态码r.
+ * @apiSuccess {String} msg  信息提示.
+ */
+router.post('/logout',tokenMiddleWare,authPermissions,(req,res)=>{
   let {_id} = req.body 
   // 数据库里的token的清空
   logOut(_id)
   .then(()=>{
     res.send({err:0,msg:'退出ok'})
   })
-
+  .catch((err)=>{
+    res.send({err:-1,msg:err})
+  })
 })
 
 /**
@@ -92,7 +97,7 @@ router.post('/logout',(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/infopage',(req,res)=>{
+router.post('/infopage',tokenMiddleWare,authPermissions,(req,res)=>{
   let page = req.body.page||1 //查询的第几页数据
   let pageSize = req.body.pageSize ||2 //每页几条数据
   findUserByPage(page,pageSize)
@@ -116,7 +121,7 @@ router.post('/infopage',(req,res)=>{
  * @apiSuccess {String} msg  信息提示.
  */
 
-router.post('/update',(req,res)=>{
+router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取修改数据的参数
   let {user,oldpass,newpass} = req.body 
   updateUser(user,oldpass,newpass)
@@ -135,8 +140,8 @@ router.post('/update',(req,res)=>{
  * @apiSuccess {String} msg  信息提示.
  * @apiSuccess {Array} list  查询到的数据.
  */
-// 2. 删除菜品
-router.post('/del',(req,res)=>{
+// 
+router.post('/del',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取要删除数据的id
   let {_id} = req.body
   delUser(_id)

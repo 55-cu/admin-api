@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 let hotSchema = new mongoose.Schema({
    name  : { type:String ,required:true},
    desc  : { type:String ,required:true},
+   hot   : { type:String,required:true}
 })
 
 let hotModel = mongoose.model('hots',hotSchema)

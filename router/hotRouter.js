@@ -6,6 +6,8 @@ const {findHotByKw,
      delHot,
      updateHot,
      findHotByPage} = require('../controls/hotControl')
+const authPermissions = require('../middleware/authPermissions')
+const tokenMiddleWare = require('../middleware/tokenMiddleWare')
 
 /**
  * @api {post} /admin/hot/add   添加热门话题
@@ -14,15 +16,17 @@ const {findHotByKw,
  *
  * @apiParam {String} name 话题名称.
  * @apiParam {String} desc 话题内容.
+ * @apiParam {String} hot 话题热度.
  *
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/add',(req,res)=>{
+router.post('/add',tokenMiddleWare,authPermissions,(req,res)=>{
   // 接受数据
-  let {name,desc} = req.body 
+  let {name,desc,hot} = req.body 
+  // console.log(hot)
   // 处理数据 插入数据库
-  insertHot({name,desc})
+  insertHot({name,desc,hot})
   .then(()=>{res.send({err:0,msg:'插入成功'})})
   .catch((err)=>{
     res.send({err:-1,msg:'插入失败请重试'})})
@@ -40,7 +44,7 @@ router.post('/add',(req,res)=>{
  * @apiSuccess {Array} list  查询到的数据.
  */
 // 根据id获取商品 
-router.post('/info',(req,res)=>{
+router.post('/info',tokenMiddleWare,authPermissions,(req,res)=>{
   let  {_id} = req.body
   findHot(_id)
   .then((infos)=>{res.send({list:infos,err:0,msg:'查询成功'})})
@@ -57,8 +61,8 @@ router.post('/info',(req,res)=>{
  * @apiSuccess {String} msg  信息提示.
  * @apiSuccess {Array} list  查询到的数据.
  */
-// 2. 删除h话题
-router.post('/del',(req,res)=>{
+// 2. 删除话题
+router.post('/del',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取要删除数据的id
   let {_id} = req.body
   delHot(_id)
@@ -75,15 +79,16 @@ router.post('/del',(req,res)=>{
  * @apiParam {String} _id  话题主键id
  * @apiParam {String} name 话题名字.
  * @apiParam {String} desc 话题内容.
+ * @apiParam {String} hot 话题热度.
  *
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
 
-router.post('/update',(req,res)=>{
+router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取修改数据的参数
-  let {_id,name,img,desc,topic} = req.body 
-  updateHot(_id,{name,img,desc,topic})
+  let {_id,name,desc,hot} = req.body 
+  updateHot(_id,{name,desc,hot})
   .then(()=>{res.send({err:0,msg:'修改成功'})})
   .catch((err)=>{res.send({err:-1,msg:'修改失败请重试'})})
 })
@@ -123,7 +128,7 @@ router.post('/infopage',(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/kwinfo',(req,res)=>{
+router.post('/kwinfo',tokenMiddleWare,authPermissions,(req,res)=>{
   let kw = req.body.kw ||''
   let page = req.body.page||1
   let pageSize = req.body.pageSize||2

@@ -5,7 +5,7 @@ let  createToken =(data,expiresIn)=>{
   let  obj ={} 
   obj.data=data||{}  //存入token的数据
   obj.ctime =(new Date()).getTime() //token的创建时间
-  obj.expiresIn = expiresIn||1000*60*60*24*7 //设定的过期时间
+  obj.expiresIn = expiresIn||1000*60*60*24*1 //设定的过期时间
   let token =JWT.sign(obj,secret)
   return token
 }
@@ -20,10 +20,8 @@ let verifyToken=(token)=>{
       //  没有过期
        result = data 
      }
-     
   } catch (error) {  
   }
-  console.log(result)
   return result
 }
 

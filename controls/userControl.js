@@ -1,14 +1,14 @@
 const UserModel = require("../db/model/userModel")
 const {createToken} = require('../utils/jwt')
-let userReg = async (user,pass)=>{
+let userReg = async (user,pass,leavel)=>{
   //  1. 用户是否重复
   let isExst = await UserModel.findOne({user})
   let result
   // 如果查询到数据 返回查到的数据 没有返回假 
   if(isExst){
-    throw '邮箱已注册'
+    throw '用户已注册'
   }else{
-    result = await UserModel.insertMany({user,pass})
+    result = await UserModel.insertMany({user,pass,leavel})
   }
   //  2. 插入数据库
   return result
@@ -42,7 +42,7 @@ let userLogin = async (user,pass)=>{
   if(result){
     //  登录成功 产生新的token
     let {_id,user} = result
-    let token =createToken({_id,user}) 
+    let token =createToken(result) 
     //将token更新数据库
     let updateResult  = await UserModel.updateOne({_id},{token})
     // 错误处理判断
@@ -57,7 +57,7 @@ let tokenCheck = async (_id,token)=>{
    if(result){
      return result 
    }else{
-     throw '用户token不匹配'
+     throw 'token不匹配'
    }
 }
 // 退出登录
@@ -66,7 +66,7 @@ let logOut = async (_id)=>{
  if(result){
   return result 
 }else{
-  throw '退出失败请重试'
+  throw '注销失败请重试'
 }
 }
 

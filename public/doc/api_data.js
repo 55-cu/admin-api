@@ -406,6 +406,13 @@ define({ "api": [
             "optional": false,
             "field": "desc",
             "description": "<p>话题内容.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "hot",
+            "description": "<p>话题热度.</p>"
           }
         ]
       }
@@ -670,6 +677,13 @@ define({ "api": [
             "optional": false,
             "field": "desc",
             "description": "<p>话题内容.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "hot",
+            "description": "<p>话题热度.</p>"
           }
         ]
       }
@@ -850,6 +864,49 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/admin/user/logout",
+    "title": "用户注销",
+    "name": "logout",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>用户id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "err",
+            "description": "<p>状态码r.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>信息提示.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "router/userRouter.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
     "url": "/admin/user/reg",
     "title": "用户注册",
     "name": "reg",
@@ -857,6 +914,13 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "leavel",
+            "description": "<p>权限等级（非必须，默认admin普通用户）.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
