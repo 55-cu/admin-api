@@ -1,9 +1,13 @@
 const {verifyToken} = require('../utils/jwt')
 const { tokenCheck } = require('../controls/userControl')
 let tokenMiddlWare = (req,res,next)=>{
-  let token = ctx.headers.authorization.split("Bearer ")[1]
-   //验证用户有没有传token
-  if(!token){return res.send({err:-997,msg:'token丢失'})} 
+  if(!req.headers.authorization || req.headers.authorization === "Bearer "){
+    return res.send({err:-997,msg:'token丢失'})
+  }
+  let token = req.headers.authorization.split("Bearer ")[1]
+  //验证用户有没有传token
+
+  // if(!token){return res.send({err:-997,msg:'token丢失'})} 
   //获取验证token的状态
   let tokenState = verifyToken(token)
   if(tokenState){

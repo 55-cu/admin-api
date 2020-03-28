@@ -103,7 +103,7 @@ router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/infopage',(req,res)=>{
+router.post('/infopage',tokenMiddleWare,(req,res)=>{
   let page = req.body.page||1 //查询的第几页数据
   let pageSize = req.body.pageSize ||2 //每页几条数据
   findHotByPage(page,pageSize)

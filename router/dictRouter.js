@@ -7,7 +7,9 @@ const {findDictByKw,
      delDict,
      updateDict,
      findDictByPage} = require('../controls/dictControl')
-const tokenMiddleWare = require('./middleware/tokenMiddleWare')
+const tokenMiddleWare = require('../middleware/tokenMiddleWare')
+const authPermissions = require('../middleware/authPermissions')
+
 
 /**
  * @api {post} /admin/dict/add   添加词典
@@ -22,7 +24,7 @@ const tokenMiddleWare = require('./middleware/tokenMiddleWare')
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/add',tokenMiddleWare,(req,res)=>{
+router.post('/add',tokenMiddleWare,authPermissions,(req,res)=>{
   // 接受数据
   let {name,img,desc,topic} = req.body 
   // 处理数据 插入数据库
@@ -44,7 +46,7 @@ router.post('/add',tokenMiddleWare,(req,res)=>{
  * @apiSuccess {Array} list  查询到的数据.
  */
 // 根据id获取商品 
-router.post('/info',tokenMiddleWare,(req,res)=>{
+router.post('/info',tokenMiddleWare,authPermissions,(req,res)=>{
   let  {_id} = req.body
   findDict(_id)
   .then((infos)=>{res.send({list:infos,err:0,msg:'查询成功'})})
@@ -62,7 +64,7 @@ router.post('/info',tokenMiddleWare,(req,res)=>{
  * @apiSuccess {Array} list  查询到的数据.
  */
 // 2. 删除词典
-router.post('/del',tokenMiddleWare,(req,res)=>{
+router.post('/del',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取要删除数据的id
   let {_id} = req.body
   delDict(_id)
@@ -86,7 +88,7 @@ router.post('/del',tokenMiddleWare,(req,res)=>{
  * @apiSuccess {String} msg  信息提示.
  */
 
-router.post('/update',tokenMiddleWare,(req,res)=>{
+router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取修改数据的参数
   let {_id,name,img,desc,topic} = req.body 
   updateDict(_id,{name,img,desc,topic})
@@ -104,7 +106,7 @@ router.post('/update',tokenMiddleWare,(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/infopage',(req,res)=>{
+router.post('/infopage',tokenMiddleWare,(req,res)=>{
   let page = req.body.page||1 //查询的第几页数据
   let pageSize = req.body.pageSize ||2 //每页几条数据
   findDictByPage(page,pageSize)
@@ -127,7 +129,7 @@ router.post('/infopage',(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/topicinfo',tokenMiddleWare,(req,res)=>{
+router.post('/topicinfo',tokenMiddleWare,authPermissions,(req,res)=>{
   let {topic} = req.body 
   findDictByType(topic)
   .then((data)=>{
@@ -150,7 +152,7 @@ router.post('/topicinfo',tokenMiddleWare,(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/kwinfo',tokenMiddleWare,(req,res)=>{
+router.post('/kwinfo',tokenMiddleWare,authPermissions,(req,res)=>{
   let kw = req.body.kw ||''
   let page = req.body.page||1
   let pageSize = req.body.pageSize||2
