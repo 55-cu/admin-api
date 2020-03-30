@@ -6,6 +6,16 @@ const  fs = require('fs')
 const  path = require('path')
 const  upload = multer({})
 const router = express.Router()
+/**
+ * @api {post} /admin/upload/img   添加图片
+ * @apiName add
+ * @apiGroup Img
+ *
+ * @apiParam {String} null 图片formData对象.
+ *
+ * @apiSuccess {String} err 状态码r.
+ * @apiSuccess {String} msg  信息提示.
+ */
 
 router.post('/img',upload.single('hehe'),(req,res)=>{
   let {buffer,mimetype,size} = req.file 

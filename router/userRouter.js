@@ -28,15 +28,17 @@ const tokenMiddleWare = require('../middleware/tokenMiddleWare')
  * @apiParam {String} leavel  权限等级（非必须，默认admin普通用户）.
  * @apiParam {String} user  用户名.
  * @apiParam {String} pass  注册密码.
+ * @apiParam {String} img  图片（非必须）.
  *
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
 router.post('/reg',(req,res)=>{
   let {user,pass} = req.body 
+  let img = req.body.img || '123.png'
   let leavel = req.body.leavel||'admin'
   // console.log(req.body)
-  userReg(user,pass,leavel)
+  userReg(user,pass,leavel,img)
   .then(()=>{res.send({err:0,msg:'注册ok'})})
   .catch((err)=>{res.send({err:-2,msg:err})})
 })
@@ -74,7 +76,7 @@ router.post('/login',(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/logout',tokenMiddleWare,authPermissions,(req,res)=>{
+router.post('/logout',tokenMiddleWare,(req,res)=>{
   let {_id} = req.body 
   // 数据库里的token的清空
   logOut(_id)
@@ -97,7 +99,7 @@ router.post('/logout',tokenMiddleWare,authPermissions,(req,res)=>{
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
-router.post('/infopage',tokenMiddleWare,authPermissions,(req,res)=>{
+router.post('/infopage',(req,res)=>{
   let page = req.body.page||1 //查询的第几页数据
   let pageSize = req.body.pageSize ||2 //每页几条数据
   findUserByPage(page,pageSize)
@@ -109,8 +111,8 @@ router.post('/infopage',tokenMiddleWare,authPermissions,(req,res)=>{
 })
 
 /**
- * @api {post} /admin/user/update   用户密码修改
- * @apiName update
+ * @api {post} /admin/user/pass   用户密码修改
+ * @apiName pass
  * @apiGroup User
  *
  * @apiParam {String} user 用户名称.
@@ -121,10 +123,10 @@ router.post('/infopage',tokenMiddleWare,authPermissions,(req,res)=>{
  * @apiSuccess {String} msg  信息提示.
  */
 
-router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
+router.post('/pass',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取修改数据的参数
   let {user,oldpass,newpass} = req.body 
-  updateUser(user,oldpass,newpass)
+  updatePass(user,oldpass,newpass)
   .then(()=>{res.send({err:0,msg:'修改成功'})})
   .catch((err)=>{res.send({err:-1,msg:err+'请重试'})})
 })
@@ -148,6 +150,30 @@ router.post('/del',tokenMiddleWare,authPermissions,(req,res)=>{
   .then(()=>{res.send({err:0,msg:'删除成功'})})
   .catch((err)=>{res.send({err:-1,msg:'删除失败请重试'})})
 
+})
+
+/**
+ * @api {post} /admin/user/update   用户信息修改
+ * @apiName update
+ * @apiGroup User
+ *
+ * @apiParam {String} _id 用户id.
+ * @apiParam {String} user 用户名称.
+ * @apiParam {String} pass 用户密码.
+ * @apiParam {String} img 用户图片.
+ * @apiParam {String} leavel 用户权限(非必须).
+ *
+ * @apiSuccess {String} err 状态码r.
+ * @apiSuccess {String} msg  信息提示.
+ */
+
+router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
+  // 获取修改数据的参数
+  let {_id,user,pass,img} = req.body 
+  let leavel = req.body.leavel || 'admin'
+  updateUser(_id,user,pass,img,leavel)
+  .then(()=>{res.send({err:0,msg:'修改成功'})})
+  .catch((err)=>{res.send({err:-1,msg:err+'请重试'})})
 })
 
 module.exports = router

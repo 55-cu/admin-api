@@ -43,7 +43,7 @@ let findDictByKw = async (kw,page,pageSize)=>{
   // 通过正则表达式匹配关键字
   let regex = new RegExp(kw)
   // 满足条件的所有数据
-  let allDict =await  dictModel.find({$or:[{desc:{$regex:regex}},{name:{$regex:regex}}] })
+  let allDict =await  dictModel.find({$or:[{desc:{$regex:regex}},{name:{$regex:regex}},{creator:{$regex:regex}}] })
   let allCount= allDict.length
   // 分页后满足关键字的数据
   let result= await dictModel.find({$or:[{desc:{$regex:regex}},{name:{$regex:regex}}] })

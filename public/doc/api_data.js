@@ -35,6 +35,34 @@ define({ "api": [
             "optional": false,
             "field": "topic",
             "description": "<p>话题.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "comments",
+            "description": "<p>评论数(非必须).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "likes",
+            "description": "<p>点赞数(非必须).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "creator",
+            "description": "<p>创建者.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ctime",
+            "description": "<p>创建时间(不用写).</p>"
           }
         ]
       }
@@ -356,6 +384,34 @@ define({ "api": [
             "optional": false,
             "field": "topic",
             "description": "<p>词典话题.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "comments",
+            "description": "<p>评论数(非必须).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "likes",
+            "description": "<p>点赞数(非必须).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "creator",
+            "description": "<p>创建者.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ctime",
+            "description": "<p>创建时间(不用写).</p>"
           }
         ]
       }
@@ -493,7 +549,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/admin/Hot/info",
+    "url": "/admin/hot/info",
     "title": "话题id查询",
     "name": "info",
     "group": "Hot",
@@ -714,6 +770,49 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/admin/upload/img",
+    "title": "添加图片",
+    "name": "add",
+    "group": "Img",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "null",
+            "description": "<p>图片formData对象.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "err",
+            "description": "<p>状态码r.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>信息提示.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "router/uploadRouter.js",
+    "groupTitle": "Img"
+  },
+  {
+    "type": "post",
     "url": "/admin/user/del",
     "title": "用户删除",
     "name": "del",
@@ -907,6 +1006,63 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/admin/user/pass",
+    "title": "用户密码修改",
+    "name": "pass",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user",
+            "description": "<p>用户名称.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "oldpass",
+            "description": "<p>旧密码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "newpass",
+            "description": "<p>修改的密码.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "err",
+            "description": "<p>状态码r.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>信息提示.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "router/userRouter.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
     "url": "/admin/user/reg",
     "title": "用户注册",
     "name": "reg",
@@ -934,6 +1090,13 @@ define({ "api": [
             "optional": false,
             "field": "pass",
             "description": "<p>注册密码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "img",
+            "description": "<p>图片（非必须）.</p>"
           }
         ]
       }
@@ -965,12 +1128,19 @@ define({ "api": [
   {
     "type": "post",
     "url": "/admin/user/update",
-    "title": "用户密码修改",
+    "title": "用户信息修改",
     "name": "update",
     "group": "User",
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>用户id.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -982,15 +1152,22 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "oldpass",
-            "description": "<p>旧密码.</p>"
+            "field": "pass",
+            "description": "<p>用户密码.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "newpass",
-            "description": "<p>修改的密码.</p>"
+            "field": "img",
+            "description": "<p>用户图片.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "leavel",
+            "description": "<p>用户权限(非必须).</p>"
           }
         ]
       }

@@ -24,16 +24,17 @@ const tokenMiddleWare = require('../middleware/tokenMiddleWare')
 router.post('/add',tokenMiddleWare,authPermissions,(req,res)=>{
   // 接受数据
   let {name,desc,hot} = req.body 
+  let ctime = (new Date()).getTime()
   // console.log(hot)
   // 处理数据 插入数据库
-  insertHot({name,desc,hot})
+  insertHot({name,desc,hot,ctime})
   .then(()=>{res.send({err:0,msg:'插入成功'})})
   .catch((err)=>{
     res.send({err:-1,msg:'插入失败请重试'})})
   // 返回数据
 })
 /**
- * @api {post} /admin/Hot/info  话题id查询
+ * @api {post} /admin/hot/info  话题id查询
  * @apiName info
  * @apiGroup Hot
  *

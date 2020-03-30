@@ -20,15 +20,22 @@ const authPermissions = require('../middleware/authPermissions')
  * @apiParam {String} desc 词典内容.
  * @apiParam {String} img 图片.
  * @apiParam {String} topic 话题.
+ * @apiParam {Number} comments 评论数(非必须).
+ * @apiParam {Number} likes 点赞数(非必须).
+ * @apiParam {String} creator 创建者.
+ * @apiParam {String} ctime 创建时间(不用写).
  *
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
  */
 router.post('/add',tokenMiddleWare,authPermissions,(req,res)=>{
   // 接受数据
-  let {name,img,desc,topic} = req.body 
+  let {name,img,desc,topic,creator} = req.body 
+  let comments = req.body.comments || 0
+  let likes = req.body.likes || 0
+  let ctime = (new Date()).getTime()
   // 处理数据 插入数据库
-  insertDict({name,img,desc,topic})
+  insertDict({name,img,desc,topic,creator,comments,likes,ctime})
   .then(()=>{res.send({err:0,msg:'插入成功'})})
   .catch((err)=>{
     res.send({err:-1,msg:'插入失败请重试'})})
@@ -83,6 +90,10 @@ router.post('/del',tokenMiddleWare,authPermissions,(req,res)=>{
  * @apiParam {String} desc 词典内容.
  * @apiParam {String} img 词典图片.
  * @apiParam {Number} topic 词典话题.
+ * @apiParam {Number} comments 评论数(非必须).
+ * @apiParam {Number} likes 点赞数(非必须).
+ * @apiParam {String} creator 创建者.
+ * @apiParam {String} ctime 创建时间(不用写).
  *
  * @apiSuccess {String} err 状态码r.
  * @apiSuccess {String} msg  信息提示.
@@ -90,8 +101,11 @@ router.post('/del',tokenMiddleWare,authPermissions,(req,res)=>{
 
 router.post('/update',tokenMiddleWare,authPermissions,(req,res)=>{
   // 获取修改数据的参数
-  let {_id,name,img,desc,topic} = req.body 
-  updateDict(_id,{name,img,desc,topic})
+  let {_id,name,img,desc,topic,creator} = req.body 
+  let comments = req.body.comments || 0
+  let likes = req.body.likes || 0
+
+  updateDict(_id,{name,img,desc,topic,creator,comments,likes})
   .then(()=>{res.send({err:0,msg:'修改成功'})})
   .catch((err)=>{res.send({err:-1,msg:'修改失败请重试'})})
 })
