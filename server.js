@@ -21,6 +21,9 @@ let  uploadRouter = require('./router/uploadRouter')
 let  dictRouter = require('./router/dictRouter')
 let  userRouter = require("./router/userRouter")
 let  hotRouter = require("./router/hotRouter")
+//导出excel
+let  xlsxRouter = require("./router/xlsx.js")
+app.use('/admin',xlsxRouter) //需要加锁的
 app.use('/admin/hot',hotRouter) //需要加锁的
 app.use('/admin/dict',dictRouter) //需要加锁的
 app.use('/admin/user',userRouter) //登录注册不需要加锁
