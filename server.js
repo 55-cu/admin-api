@@ -23,6 +23,8 @@ let  userRouter = require("./router/userRouter")
 let  hotRouter = require("./router/hotRouter")
 //导出excel
 let  xlsxRouter = require("./router/xlsx.js")
+let  disRouter = require("./router/discussRouter")
+app.use('/admin/dis',disRouter)
 app.use('/admin',xlsxRouter) //需要加锁的
 app.use('/admin/hot',hotRouter) //需要加锁的
 app.use('/admin/dict',dictRouter) //需要加锁的
